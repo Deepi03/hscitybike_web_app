@@ -6,10 +6,15 @@ App {
   align-items: center;
 }
 
+.heading {
+  text-align: center;
+}
+
 table {
   border: 2px solid forestgreen;
   width: 800px;
   height: 200px;
+  margin-left: 30rem;
 }
 
 th {
@@ -17,5 +22,29 @@ th {
 }
 
 td {
+  text-align: center;
+}
+
+.container {
+  padding-top: 2rem;
+  margin-left: 44rem;
+  .pagination {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    .pagination-item {
+      list-style: none;
+      .pagination-link {
+        border: solid 1px forestgreen;
+        font-size: 1.5rem;
+        background-color: forestgreen;
+        color: wheat;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.back {
   text-align: center;
 }

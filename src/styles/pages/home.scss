@@ -1,0 +1,18 @@
+.heading {
+  text-align: center;
+  font-size: 4rem;
+  color: forestgreen;
+}
+
+.nav {
+  text-align: center;
+  ul {
+    li {
+      list-style: none;
+      font-size: 3rem;
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+}

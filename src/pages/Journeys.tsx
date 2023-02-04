@@ -7,11 +7,12 @@ import {
   PaginationItem,
   PaginationLink
 } from "reactstrap";
+import { useNavigate } from "react-router-dom";
 
 export const Journeys = () => {
   const [result, setResult] = useState<JourneyContent>();
-
-  const [journeyContent, setPostContent] = useState<JourneyContent>({
+  const navigate = useNavigate();
+  const [journeyContent, setJourneyContent] = useState<JourneyContent>({
     content: [],
     totalPages: 0,
     totalElements: 0,
@@ -37,7 +38,7 @@ export const Journeys = () => {
 
   const changePage = (pageNumber = 0, pageSize = 5) => {
     if (pageNumber > journeyContent.pageNumber && journeyContent.content) {
-      setPostContent({
+      setJourneyContent({
         ...journeyContent,
         pageNumber: pageNumber
       });
@@ -45,7 +46,7 @@ export const Journeys = () => {
     }
 
     if (pageNumber < journeyContent.pageNumber && journeyContent.pageNumber > 0) {
-      setPostContent({
+      setJourneyContent({
         ...journeyContent,
         pageNumber: pageNumber
       });
@@ -55,7 +56,8 @@ export const Journeys = () => {
 
   return (
     <div>
-      <h1>Journey</h1>
+      
+      <h1 className="heading">Journey</h1>
       <table>
         <tr>
           <th>Departure Station ID</th>
@@ -70,6 +72,7 @@ export const Journeys = () => {
         {result?.content?.map(value => {
           return (
             <tr key={value.departureStationId+value.departureTime}>
+              
               <td>
                 {value.departureStationId}
               </td>
@@ -99,23 +102,30 @@ export const Journeys = () => {
         })}
       </table>
 
-      <Container className="mt-3">
-        <Pagination size="lg">
+      <Container className="mt-3 container">
+        <Pagination size="lg" className="pagination">
           <PaginationItem
+          className="pagination-item"
             onClick={() => changePage(journeyContent.pageNumber - 1)}
             disabled={journeyContent.pageNumber === 0}
           >
-            <PaginationLink previous></PaginationLink>
+            <PaginationLink className="pagination-link" previous></PaginationLink>
           </PaginationItem>
           
           <PaginationItem
+          className="pagination-item"
             onClick={() => changePage(journeyContent.pageNumber + 1)}
             disabled={journeyContent.lastPage}
           >
-            <PaginationLink next></PaginationLink>
+            <PaginationLink className="pagination-link" next></PaginationLink>
           </PaginationItem>
         </Pagination>
       </Container>
+      <div className="back">
+        <button onClick={() => navigate(-1)}>
+              Go back
+      </button>
+      </div>
     </div>
   );
 };
