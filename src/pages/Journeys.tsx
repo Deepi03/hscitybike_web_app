@@ -1,19 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { Journey } from "../types/journey";
 import "../styles/pages/journey.scss";
+import { JourneyContent } from "../types/journeyContent";
+import {
+  Container,
+  Pagination,
+  PaginationItem,
+  PaginationLink
+} from "reactstrap";
 
 export const Journeys = () => {
-  const [result, setResult] = useState<Journey[]>([]);
+  const [result, setResult] = useState<JourneyContent>();
 
-  useEffect(() => {
-    const api = async () => {
-      const data = await fetch("http://localhost:8080/api/journeys");
-      const jsonData = await data.json();
-      setResult(jsonData);
-    };
+  const [journeyContent, setPostContent] = useState<JourneyContent>({
+    content: [],
+    totalPages: 0,
+    totalElements: 0,
+    pageSize: 5,
+    lastPage: false,
+    pageNumber: 0
+  });
 
-    api();
-  }, []);
+  const api = async (pageNumber: number, pageSize: number) => {
+    const data = await fetch(
+      `http://localhost:8080/api/journeys?page=${pageNumber}&size=${pageSize}`
+    );
+    const jsonData = await data.json();
+    setResult(jsonData);
+  };
+
+  useEffect(
+    () => {
+      api(journeyContent.pageNumber, journeyContent.pageSize);
+    },
+    [journeyContent]
+  );
+
+  const changePage = (pageNumber = 0, pageSize = 5) => {
+    if (pageNumber > journeyContent.pageNumber && journeyContent.content) {
+      setPostContent({
+        ...journeyContent,
+        pageNumber: pageNumber
+      });
+      return;
+    }
+
+    if (pageNumber < journeyContent.pageNumber && journeyContent.pageNumber > 0) {
+      setPostContent({
+        ...journeyContent,
+        pageNumber: pageNumber
+      });
+      return;
+    }
+  };
 
   return (
     <div>
@@ -29,9 +67,9 @@ export const Journeys = () => {
           <th>Duration</th>
           <th> Distance</th>
         </tr>
-        {result.map(value => {
+        {result?.content?.map(value => {
           return (
-            <tr>
+            <tr key={value.departureStationId+value.departureTime}>
               <td>
                 {value.departureStationId}
               </td>
@@ -60,6 +98,24 @@ export const Journeys = () => {
           );
         })}
       </table>
+
+      <Container className="mt-3">
+        <Pagination size="lg">
+          <PaginationItem
+            onClick={() => changePage(journeyContent.pageNumber - 1)}
+            disabled={journeyContent.pageNumber === 0}
+          >
+            <PaginationLink previous></PaginationLink>
+          </PaginationItem>
+          
+          <PaginationItem
+            onClick={() => changePage(journeyContent.pageNumber + 1)}
+            disabled={journeyContent.lastPage}
+          >
+            <PaginationLink next></PaginationLink>
+          </PaginationItem>
+        </Pagination>
+      </Container>
     </div>
   );
 };
