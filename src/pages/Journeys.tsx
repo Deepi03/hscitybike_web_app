@@ -60,6 +60,7 @@ export const Journeys = () => {
       <h1 className="heading">Journey</h1>
       <table>
         <tr>
+          <th>Journey Id</th>
           <th>Departure Station ID</th>
           <th>Departure Station Name</th>
           <th>Departure Time</th>
@@ -72,7 +73,9 @@ export const Journeys = () => {
         {result?.content?.map(value => {
           return (
             <tr key={value.departureStationId+value.departureTime}>
-              
+              <td>
+                {value.id}
+              </td>
               <td>
                 {value.departureStationId}
               </td>
