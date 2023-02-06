@@ -53,6 +53,7 @@ export const Stations = () => {
       <h1 className="heading">Stations</h1>
       <table>
         <tr>
+          <th>Station Id</th>
           <th>Station Name</th>
           <th>No. of departures</th>
           <th>No. of returns</th>
@@ -60,6 +61,7 @@ export const Stations = () => {
         {result?.content.map(value => {
           return (
             <tr>
+              <td>{value.id}</td>
               <td>
                 {value.station}
               </td>
