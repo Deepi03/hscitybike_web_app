@@ -8,9 +8,12 @@ import {
   PaginationLink
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
+import { DisplayResult } from "../components/DisplayResult";
+import { Search } from "../components/Search";
 
 export const Journeys = () => {
   const [result, setResult] = useState<JourneyContent>();
+  const [flag, setFlag] = useState<boolean>(false);
   const navigate = useNavigate();
   const [journeyContent, setJourneyContent] = useState<JourneyContent>({
     content: [],
@@ -31,9 +34,11 @@ export const Journeys = () => {
 
   useEffect(
     () => {
+      console.log("inside ",flag
+      );
       api(journeyContent.pageNumber, journeyContent.pageSize);
     },
-    [journeyContent]
+    []
   );
 
   const changePage = (pageNumber = 0, pageSize = 5) => {
@@ -45,7 +50,10 @@ export const Journeys = () => {
       return;
     }
 
-    if (pageNumber < journeyContent.pageNumber && journeyContent.pageNumber > 0) {
+    if (
+      pageNumber < journeyContent.pageNumber &&
+      journeyContent.pageNumber > 0
+    ) {
       setJourneyContent({
         ...journeyContent,
         pageNumber: pageNumber
@@ -53,81 +61,38 @@ export const Journeys = () => {
       return;
     }
   };
+  
+   /* const callbackFunction = (flag: boolean) => {
+      setFlag(flag);
+};  */ 
 
   return (
     <div>
-      
       <h1 className="heading">Journey</h1>
-      <table>
-        <tr>
-          <th>Journey Id</th>
-          <th>Departure Station ID</th>
-          <th>Departure Station Name</th>
-          <th>Departure Time</th>
-          <th>Return Station ID</th>
-          <th>Return Station Name</th>
-          <th>Return Time</th>
-          <th>Duration</th>
-          <th> Distance</th>
-        </tr>
-        {result?.content?.map(value => {
-          return (
-            <tr key={value.departureStationId+value.departureTime}>
-              <td>
-                {value.id}
-              </td>
-              <td>
-                {value.departureStationId}
-              </td>
-              <td>
-                {value.departureStation}
-              </td>
-              <td>
-                {value.departureTime}
-              </td>
-              <td>
-                {value.returnStationId}
-              </td>
-              <td>
-                {value.returnStation}
-              </td>
-              <td>
-                {value.returnTime}
-              </td>
-              <td>
-                {value.duration}
-              </td>
-              <td>
-                {value.coveredDistance}
-              </td>
-            </tr>
-          );
-        })}
-      </table>
-
+        {/* <Search parentCallback = {callbackFunction}/>  */}  
+      {result?.content ? <DisplayResult parentToChild = {result?.content} /> &&
       <Container className="mt-3 container">
         <Pagination size="lg" className="pagination">
           <PaginationItem
-          className="pagination-item"
+            className="pagination-item"
             onClick={() => changePage(journeyContent.pageNumber - 1)}
             disabled={journeyContent.pageNumber === 0}
           >
-            <PaginationLink className="pagination-link" previous></PaginationLink>
+            <PaginationLink className="pagination-link" previous />
           </PaginationItem>
-          
+
           <PaginationItem
-          className="pagination-item"
+            className="pagination-item"
             onClick={() => changePage(journeyContent.pageNumber + 1)}
             disabled={journeyContent.lastPage}
           >
-            <PaginationLink className="pagination-link" next></PaginationLink>
+            <PaginationLink className="pagination-link" next />
           </PaginationItem>
         </Pagination>
       </Container>
+      : null}
       <div className="back">
-        <button onClick={() => navigate(-1)}>
-              Go back
-      </button>
+        <button onClick={() => navigate(-1)}>Go back</button>
       </div>
     </div>
   );

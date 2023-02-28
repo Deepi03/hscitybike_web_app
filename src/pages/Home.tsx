@@ -1,6 +1,7 @@
 import React from "react";
 
 import { NavBar } from "../components/NavBar";
+import { Search } from "../components/Search";
 import "../styles/pages/home.scss";
 
 export const Home = () => {
